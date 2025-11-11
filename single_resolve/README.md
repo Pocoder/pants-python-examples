@@ -16,3 +16,28 @@ Alternatively, you can remove the ambiguity by deleting/changing some of the tar
 
 If you do not expect an import to be inferable, add `# pants: no-infer-dep` to the import line. Otherwise, see https://www.pantsbuild.org/2.29/docs/using-pants/troubleshooting-common-issues#import-errors-and-missing-dependencies for common problems.
 ```
+
+Modifyin third/BUILD as follows:
+
+```
+python_requirement(
+    name="reqs",
+    requirements=["numpy>=2.3"],
+    resolve="single",
+)
+
+python_sources(
+    resolve="single",
+    dependencies=[":reqs"],
+)
+```
+
+does not remove the warning, only changes it to:
+
+```shell
+[WARN] Pants cannot infer owners for the following imports in the target single_resolve/third/main.py:
+
+  * numpy (line: 1)
+
+If you do not expect an import to be inferable, add `# pants: no-infer-dep` to the import line. Otherwise, see https://www.pantsbuild.org/2.29/docs/using-pants/troubleshooting-common-issues#import-errors-and-missing-dependencies for common problems.
+```
